@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , flutter
+, cacert
+, pkg-config
 }:
 flutter.buildFlutterApplication rec {
   pname = "musicpod";
@@ -12,12 +14,16 @@ flutter.buildFlutterApplication rec {
     rev = "b15605f";
     hash = "sha256-mFsiy69xHHCBDAg2RyeSV36/0c0F7UWsw7LnmIMID3k=";
   };
+  nativeBuildInputs = [ cacert pkg-config ];
+  buildInputs = [ cacert ];
 
-  pubGetScript = ''
-    flutter pub get
-    exit 1
-  '';
-  autoDepsList = true;
-  pubspecLockFile = ./pubspec.lock;
+  # dartCompileFlags = [ "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt" ];
+
+  # pubGetScript = ''
+  #   SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt" flutter pub get
+  # '';
+
+  # depsListFile = ./deps.json;
+  #pubspecLockFile = ./pubspec.lock;
   vendorHash = lib.fakeHash;
 }
