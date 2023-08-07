@@ -1,8 +1,10 @@
 { lib
 , fetchFromGitHub
 , flutter
-, cacert
-, pkg-config
+, cmake
+, mimalloc
+, clang
+, removeReferencesTo
 }:
 flutter.buildFlutterApplication rec {
   pname = "musicpod";
@@ -11,19 +13,31 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
-    rev = "b15605f";
+    rev = "b15605ff822c76c804729d96ae351bbb17215bbb";
     hash = "sha256-mFsiy69xHHCBDAg2RyeSV36/0c0F7UWsw7LnmIMID3k=";
   };
-  nativeBuildInputs = [ cacert pkg-config ];
-  buildInputs = [ cacert ];
 
-  # dartCompileFlags = [ "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt" ];
+  postInstall = ''
+    exit 1
+  '';
+  buildPhase = ''
+    git clone https://github.com/ubuntu-flutter-community/musicpod/tree/main
+    exit 1
+    dart compile
+  '';
+  nativeBuildInputs = [
+    removeReferencesTo
+    flutter
+    mimalloc
+    cmake
+    clang
+  ];
 
-  # pubGetScript = ''
-  #   SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt" flutter pub get
-  # '';
-
-  # depsListFile = ./deps.json;
-  #pubspecLockFile = ./pubspec.lock;
-  vendorHash = lib.fakeHash;
+  disallowedReferences = [
+    flutter
+  ];
+  autoDepsList = true;
+  #depsListFile = ./deps.json;
+  pubspecLockFile = ./pubspec.lock;
+  vendorHash = "sha256-tAmakxg0wLMed6UOJY6gu2S85fayBzKYWeSA1FReFlw=";
 }

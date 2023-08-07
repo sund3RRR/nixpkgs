@@ -1007,10 +1007,10 @@ packages:
     dependency: "direct main"
     description:
       name: yaru_widgets
-      sha256: f1218b9b7b085f790fcc7a67e0170c8ce2e567dece3f75e8cfb36fdfc1a7071b
+      sha256: "1a9c46e699dfd1621c50c02d6119f88a436bd0b64f4638b4ecc4e727552bcd5d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0"
+    version: "2.6.1"
   yaru_window:
     dependency: "direct main"
     description:

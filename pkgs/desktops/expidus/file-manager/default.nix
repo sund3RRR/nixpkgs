@@ -10,7 +10,7 @@ flutter.buildFlutterApplication rec {
     sha256 = "sha256-aAPmwzNPgu08Ov9NyRW5bcj3jQzG9rpWwrABRyK2Weg=";
   };
 
-  depsListFile = ./deps.json;
+  zdepsListFile = ./deps.json;
   vendorHash = "sha256-mPGrpMUguM9XAYWH8lBQuytxZ3J0gS2XOMPkKyFMLbc=";
 
   postInstall = ''
