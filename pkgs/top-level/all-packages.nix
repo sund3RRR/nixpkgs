@@ -33623,6 +33623,8 @@ with pkgs;
 
   musescore = libsForQt5.callPackage ../applications/audio/musescore { };
 
+  musicpod = callPackage ../applications/audio/musicpod { };
+
   music-player = callPackage ../applications/audio/music-player { };
 
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
