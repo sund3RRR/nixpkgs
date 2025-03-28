@@ -12,14 +12,12 @@
   shadowsocks-rust,
   cloak-pt,
   wireguard-tools,
-  procps,
-  iproute2,
-  sudo,
   libssh,
   zlib,
   tun2socks,
   xray,
   nix-update-script,
+  bash,
 }:
 let
   amnezia-tun2socks = tun2socks.overrideAttrs (
@@ -107,31 +105,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bash
+    kdePackages.qt5compat
+    kdePackages.qtremoteobjects
+    kdePackages.qtsvg
     libsecret
     qt6.qtbase
     qt6.qttools
-    kdePackages.qtremoteobjects
-    kdePackages.qtsvg
-    kdePackages.qt5compat
   ];
 
-  qtWrapperArgs = [
-    ''--prefix PATH : ${
-      lib.makeBinPath [
-        procps
-        iproute2
-        sudo
-      ]
-    }''
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  postInstall = ''
     mkdir -p $out/bin $out/libexec $out/share/applications $out/share/pixmaps $out/lib/systemd/system
-    cp client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
-    cp ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
-    cp ../AppDir/AmneziaVPN.desktop $out/share/applications/
-    cp ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
-    cp ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
+    install -m755 client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
+    install -m755 ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
+    install -m644 ../AppDir/AmneziaVPN.desktop $out/share/applications/
+    install -m644 ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
+    install -m644 ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
+
+    runHook postInstall
   '';
 
   passthru = {
@@ -149,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Amnezia VPN Client";
     downloadPage = "https://amnezia.org/en/downloads";
-    homepage = "https://amnezia.org/en";
+    homepage = "https://github.com/amnezia-vpn/amnezia-client";
     license = licenses.gpl3;
     mainProgram = "AmneziaVPN";
     maintainers = with maintainers; [ sund3RRR ];
